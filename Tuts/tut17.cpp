@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int sum(int a, int b) // you must use the inline functions when there is very small code inside the braces
+inline int sum(int a, int b) // you must use the inline functions when there is very small code inside the braces
 {
     // static int c = 0; // this excutes only once and don't use the static with inline funcs
     // c++; or c +=1 or c = c + 1
