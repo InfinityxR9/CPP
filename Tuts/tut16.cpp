@@ -40,7 +40,7 @@ int main()
     cout << "The value of a and b is: " << a << " " << b << endl;
     // swap(a, b);        // this will not swap
     // swapPointer(&a, &b); // This will swap
-    swapReferenceVar(a, b) = 766; // This will also swap and will change the value of 'a'
+    swapReferenceVar(a, b) = 766; // Return by reference
     cout << "The value of a and b is: " << a << " " << b << endl;
 
     return 0;

@@ -9,8 +9,8 @@ private:
     string _name;
     int _salary;
     int _age;
-    
-    public:
+
+public:
     string company_name = "Infinity Limited";
     string evaluated_date = __DATE__;
     string evaluated_time = __TIME__;
