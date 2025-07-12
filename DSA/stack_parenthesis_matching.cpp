@@ -3,6 +3,7 @@
 
 using namespace std;
 
+// The Abstract Data-Type Stack based on LiFo Principle (Last in First out)
 class Stack
 {
     int top;

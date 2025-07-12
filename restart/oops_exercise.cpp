@@ -3,6 +3,9 @@
 
 using namespace std;
 
+// After incorporating the Ambiguity resolution in Inheritance
+// PRO TIP: Local methods are always on par priority in times of ambiguity in Inheritance
+
 // Simple calculator
 class Simple_Calculator
 {
@@ -18,7 +21,7 @@ public:
         cin >> num_2;
     }
 
-    void display_result_s()
+    void display_result()
     {
         cout << "Addition result: " << num_1 + num_2 << endl;
         cout << "Multiplication result: " << num_1 * num_2 << endl;
@@ -42,10 +45,10 @@ public:
         cin >> num_2;
     }
 
-    void display_result_c()
+    void display_result()
     {
-        cout << "sine of number 1 result: " << sinf(num_1)<< endl;
-        cout << "sine of number 2 result: " << sinf(num_2)<< endl;
+        cout << "sine of number 1 result: " << sinf(num_1) << endl;
+        cout << "sine of number 2 result: " << sinf(num_2) << endl;
         cout << "Square root of number 1 result: " << sqrtf(num_1) << endl;
         cout << "Square root of number 2 result: " << sqrtf(num_2) << endl;
         cout << "Cube Root of number 1 result: " << cbrtf(num_1) << endl;
@@ -55,21 +58,23 @@ public:
 };
 
 // Hybrid Calculator (Child from Simple and Scientific Calculator)
-class Hybrid_Calculator : public Simple_Calculator, public Scientific_Calculator {
+class Hybrid_Calculator : public Simple_Calculator, public Scientific_Calculator
+{
 public:
-    Hybrid_Calculator () {
-        display_result_s();
-        display_result_c();
+    Hybrid_Calculator()
+    {
+        Simple_Calculator::display_result();
+        Scientific_Calculator::display_result();
     }
 };
 
 int main()
 {
     // Simple_Calculator sc = Simple_Calculator();
-    // sc.display_result_s();
+    // sc.display_result();
 
     // Scientific_Calculator sc = Scientific_Calculator();
-    // sc.display_result_c();
+    // sc.display_result();
 
     Hybrid_Calculator sc = Hybrid_Calculator();
 
