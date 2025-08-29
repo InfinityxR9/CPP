@@ -3,6 +3,9 @@
 
 // Equivalent to Doubly Linked List (Advanced)
 
+// Difference between Deque (Doubly Ended Queue) and List 
+// Deque is implemented using Dynamic Arrays and hence Random access is faster
+
 using namespace std;
 
 void print_list(list<int> &lst)
