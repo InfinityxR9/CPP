@@ -9,7 +9,7 @@ using namespace std;
 // *Either of the left or right half of a Rotated Sorted Array is always fully sorted, and it can be determined by doing comparison of low value and mid value
 
 // *Time Complexity: O(lg n) (Binary Search Approach)
-// For brute force approach, O(n) (Linear Search)\
+// For brute force approach, O(n) (Linear Search)
 
 // *Space Complexity: O(1)
 
