@@ -50,6 +50,7 @@ This folder contains implementations of classic DSA problems and algorithms, foc
 - [Pair Sum in Sorted Array](DSA/pair_sum.cpp) (Two Pointers)
 - [Rotated Array Search](DSA/rotated_array_search.cpp) (Modified Binary Search)
 - [Stack Parenthesis Matching](DSA/stack_parenthesis_matching.cpp) (Custom Stack Implementation)
+- [DNF Algorithm](DSA/DNF_algorithm.cpp) (Dutch National Flag Algorithm for 0s, 1s and 2s sorting)
 
 ---
 
