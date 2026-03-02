@@ -9,7 +9,7 @@ using namespace std;
  * For the classification purpose, we will assume any pixel = 0 is the background canvas
  */
 
-// Define `MAX` possible 2D matrix size
+// Define `MAX` to be maximum possible 2D matrix size
 #define MAX 200
 
 // Define `M, N` as row and column variables
@@ -40,11 +40,10 @@ public:
 };
 
 /**
- * Define Stack Structure Class
+ * Define Stack ADT Class
  */
 class Stack
 {
-    // The space complexity for the algorithm would be `O(M*N)` and `M,N <= MAX`
     Point arr[MAX * MAX];
     int top;
 
@@ -156,9 +155,9 @@ Region expandRegion(int start_r, int start_c)
 
             /**
              * Region Expansion along this point occurs if all the following conditions are met:
-             * This is a valid point on image matrix
-             * This point is not already visited
-             ** The pixel value at this point is under the tolerance with fixed seed intensity (the initial expansion point)
+                * This is a valid point on image matrix
+                * This point is not already visited
+                ** The pixel value at this point is under the tolerance with current point intensity (Using current intensity instead of fixed seed intensity to include the gradient points)
              */
 
             if (isValid(new_r, new_c) && !isVisited[new_r][new_c] && abs(matrix[new_r][new_c] - matrix[r][c]) <= T)
@@ -175,7 +174,7 @@ Region expandRegion(int start_r, int start_c)
 
 /**
  * Classification logic for Rectangular Region
- *
+ * @note The region is rectangular if the `fillRatio/density` is nearly `0.95` suggesting that the region marked by these rectangular boundaries are `95%` filled
  * @param region The Region to be classified as Rectangular
  * @returns `true` if the Region `region` is rectangular, otherwise `false`
  */
@@ -206,13 +205,15 @@ bool isCircular(const Region &region)
     int width = region.max_c - region.min_c + 1;
     int height = region.max_r - region.min_r + 1;
 
+    // the boundaries should be square-like for the region to be near circlular
     if (abs(width - height) > 0.1 * max(width, height))
         return false;
 
     int boxArea = width * height;
     double fillRatio = (double)region.area / boxArea;
 
-    // Circle expected ≈ 0.785
+    // Circle expected = 0.785 ((pi*r*r)/(4*r*r))
+    // fillRatio greater than 90% will suggest that the region is more rectangular than circular 
     return (fillRatio > 0.65 && fillRatio < 0.90);
 }
 
@@ -235,6 +236,9 @@ void show_boundary(Region &region)
     }
 }
 
+/**
+ * Function to call the detection classification logic on the 2D Image Matrix
+ */
 void run_detection()
 {
     // Taking the 2D matrix from input file
@@ -250,13 +254,14 @@ void run_detection()
         {
             if (matrix[i][j] == 0)
             {
+                // marking canvas points as true so that they don't interfere in the classification
                 isVisited[i][j] = true;
                 continue;
             }
             isVisited[i][j] = false;
         }
 
-    // For each unvisited point in the 2D matrix, expand the region for that point
+    // For each unvisited non-canvas point in the 2D matrix, expand the region for that point
     // and classify the region as rectangular or circular
 
     for (int i = 0; i < M; i++)
@@ -297,6 +302,9 @@ void run_detection()
     cout << "--------------------------" << endl;
 }
 
+/**
+ * Utility function to display the modified 2D Image Matrix as a Heatmap
+ */
 void print_visual_image()
 {
 
@@ -333,6 +341,7 @@ void print_visual_image()
 
 int main()
 {
+    // Calling the functions in right order 
     run_detection();
     print_visual_image();
 
