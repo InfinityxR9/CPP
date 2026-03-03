@@ -26,8 +26,8 @@ int T = 5;
 
 /**
  * Define the pixel class as a point in 2D matrix
- * @param r Number of Rows
- * @param c Number of Columns
+ * @param r Row index
+ * @param c Column index
  */
 struct Point
 {
@@ -127,6 +127,10 @@ Region expandRegion(int start_r, int start_c)
     st.push(Point(start_r, start_c));
     isVisited[start_r][start_c] = true;
 
+    // the four directions for region expansion (x, y)
+    int x[4] = {-1, 1, 0, 0};
+    int y[4] = {0, 0, 1, -1};
+    
     while (!st.isEmpty())
     {
         Point p = st.pop();
@@ -144,9 +148,6 @@ Region expandRegion(int start_r, int start_c)
         region.max_c = max(c, region.max_c);
         region.max_r = max(r, region.max_r);
 
-        // the four directions for region expansion (x, y)
-        int x[4] = {-1, 1, 0, 0};
-        int y[4] = {0, 0, 1, -1};
 
         for (int i = 0; i < 4; i++)
         {
