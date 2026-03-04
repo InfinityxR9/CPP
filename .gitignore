@@ -1,6 +1,5 @@
 .vscode
 *.exe
-*.out
 bin/
 *.log
 *.db
@@ -8,4 +7,3 @@ bin/
 .idea/
 *.sublime-project
 *.swp
-*.in
