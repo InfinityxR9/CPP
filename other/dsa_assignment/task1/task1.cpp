@@ -8,17 +8,9 @@ using namespace std;
  * Standard Variables and Constants Declaration
  * For the classification purpose, we will assume any pixel = 0 is the background canvas
  */
-
-// Define `MAX` to be maximum possible 2D matrix size
 #define MAX 200
-
-// Define `M, N` as row and column variables
 int M, N;
-
-// Define the 2D `matrix` representing the image
 int matrix[MAX][MAX];
-
-// Define `isVisited` boolean matrix, marking whether each pixel `[i][j]` is visited or not for region expansion
 bool isVisited[MAX][MAX];
 
 // Define threshold limit `(T)` for grouping the pixels as region
@@ -48,25 +40,21 @@ class Stack
     int top;
 
 public:
-    // Constructor
     Stack()
     {
         top = -1;
     }
 
-    // Push operation
     void push(Point key)
     {
         arr[++top] = key;
     }
 
-    // Pop operation
     Point pop()
     {
         return arr[top--];
     }
 
-    // Checking for stack to be empty
     bool isEmpty()
     {
         return (top == -1);
@@ -126,8 +114,6 @@ Region expandRegion(int start_r, int start_c)
 
     st.push(Point(start_r, start_c));
     isVisited[start_r][start_c] = true;
-
-    // the four directions for region expansion (x, y)
     int x[4] = {-1, 1, 0, 0};
     int y[4] = {0, 0, 1, -1};
     
@@ -138,7 +124,7 @@ Region expandRegion(int start_r, int start_c)
         int r = p.r;
         int c = p.c;
 
-        // Updating Region statistics
+        // update Region data
         region.pixels[region.area++] = p;
         region.sum_r += r;
         region.sum_c += c;
@@ -158,12 +144,11 @@ Region expandRegion(int start_r, int start_c)
              * Region Expansion along this point occurs if all the following conditions are met:
                 * This is a valid point on image matrix
                 * This point is not already visited
-                ** The pixel value at this point is under the tolerance with current point intensity (Using current intensity instead of fixed seed intensity to include the gradient points)
+                * * The pixel value at this point is under the tolerance with current point intensity
              */
 
             if (isValid(new_r, new_c) && !isVisited[new_r][new_c] && abs(matrix[new_r][new_c] - matrix[r][c]) <= T)
             {
-                // Mark the point as visited and push into stack for region expansion
                 isVisited[new_r][new_c] = true;
                 st.push(Point(new_r, new_c));
             }
@@ -175,7 +160,7 @@ Region expandRegion(int start_r, int start_c)
 
 /**
  * Classification logic for Rectangular Region
- * @note The region is rectangular if the `fillRatio/density` is nearly `0.95` suggesting that the region marked by these rectangular boundaries are `95%` filled
+ * @note The region is rectangular if the `fillRatio/density` is nearly `0.95` suggesting that the region marked by these rectangular boundaries are nearly filled
  * @param region The Region to be classified as Rectangular
  * @returns `true` if the Region `region` is rectangular, otherwise `false`
  */
@@ -184,11 +169,8 @@ bool isRectangle(const Region &region)
     int width = region.max_c - region.min_c + 1;
     int height = region.max_r - region.min_r + 1;
     int boxArea = width * height;
-
-    // density ratio
     double fillRatio = (double)region.area / boxArea;
 
-    // Rectangle must be almost fully filled
     if (fillRatio >= 0.95)
         return true;
 
@@ -205,8 +187,6 @@ bool isCircular(const Region &region)
 {
     int width = region.max_c - region.min_c + 1;
     int height = region.max_r - region.min_r + 1;
-
-    // the boundaries should be square-like for the region to be near circlular
     if (abs(width - height) > 0.1 * max(width, height))
         return false;
 
@@ -249,13 +229,11 @@ void run_detection()
         for (int j = 0; j < N; j++)
             cin >> matrix[i][j];
 
-    // Initialise the isVisited matrix as a false boolean matrix
     for (int i = 0; i < M; i++)
         for (int j = 0; j < N; j++)
         {
             if (matrix[i][j] == 0)
             {
-                // marking canvas points as true so that they don't interfere in the classification
                 isVisited[i][j] = true;
                 continue;
             }
@@ -342,7 +320,6 @@ void print_visual_image()
 
 int main()
 {
-    // Calling the functions in right order 
     run_detection();
     print_visual_image();
 

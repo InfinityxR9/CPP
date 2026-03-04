@@ -6,16 +6,9 @@ using namespace std;
  * Standard Variables and Constants Declaration
  */
 
-// Define `MAX` to be maximum possible 2D matrix size
 #define MAX 200
-
-// Define `M, N` as row and column variables
 int M, N;
-
-// Define the 2D `matrix` representing the image
 int matrix[MAX][MAX];
-
-// Define `isVisited` boolean matrix, marking whether each pixel `[i][j]` is visited or not for building the LL representation of given sparse matrix
 bool isVisited[MAX][MAX];
 
 /**
@@ -42,25 +35,21 @@ class Stack
     int top;
 
 public:
-    // Constructor
     Stack()
     {
         top = -1;
     }
 
-    // Push operation
     void push(Point key)
     {
         arr[++top] = key;
     }
 
-    // Pop operation
     Point pop()
     {
         return arr[top--];
     }
 
-    // Checking for stack to be empty
     bool isEmpty()
     {
         return (top == -1);
@@ -175,7 +164,6 @@ Object detect_obj(int start_r, int start_c)
     obj.area = 0;
     obj.b_count = 0;
 
-    // the four directions for region expansion (x, y)
     int x[4] = {-1, 1, 0, 0};
     int y[4] = {0, 0, 1, -1};
 
@@ -186,8 +174,6 @@ Object detect_obj(int start_r, int start_c)
         int c = p.c;
 
         obj.area++;
-
-        // variable to store whether (r, c) is a boundary pixel
         bool bound = false;
 
         for (int i = 0; i < 4; i++)
@@ -197,9 +183,9 @@ Object detect_obj(int start_r, int start_c)
 
             /**
              * The pixel point (r, c) is a boundary point if any of the 4 directions are either:
-             ** Invalid point on 2D matrix
+             * * Invalid point on 2D matrix
              * OR
-             ** is a background point
+             * * is a background point
              */
 
             if (!isValid(new_r, new_c) || matrix[new_r][new_c] == 0)
@@ -214,7 +200,6 @@ Object detect_obj(int start_r, int start_c)
             }
         }
 
-        // If the point (r, c) is a boundary pixel of this object, append it into the boundary pixel array of object
         if (bound)
         {
             obj.b_pix[obj.b_count++] = Point(r, c);
@@ -249,7 +234,6 @@ int main()
         }
     }
 
-    // Initialise the isVisited matrix as a false boolean matrix
     for (int i = 0; i < M; i++)
     {
         for (int j = 0; j < N; j++)
@@ -279,7 +263,7 @@ int main()
     }
 
     // Showing asked outputs
-    // Showing Original Sparse LL
+    // original Sparse LL
     cout << "Showing the original sparse LL" << endl;
     display();
 
@@ -344,7 +328,7 @@ int main()
         temp = temp->next;
     }
 
-    // Final reconstructed matrix
+    // print final reconstructed matrix
     cout << "Printing the final reconstructed image matrix:" << endl;
     for (int i = 0; i < M; i++)
     {
@@ -355,11 +339,10 @@ int main()
         cout << endl;
     }
 
-    // Showing Sparse LL after Operations
+    // updated Sparse LL after Operations
     cout << "Showing the new sparse LL (after operations)" << endl;
     display();
 
-    // Free all the dynamic allocated memory
     delete[] objs;
     objs = nullptr;
     free_LL();
