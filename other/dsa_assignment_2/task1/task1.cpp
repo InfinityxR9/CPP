@@ -2,6 +2,13 @@
 
 using namespace std;
 
+/**
+ * `Player` structure
+ * @param pid Id of Player
+ * @param pname Name of Player
+ * @param pscore Score of Player
+ * @param time Timestamp of Player
+ */
 struct Player
 {
     int pid;
@@ -10,6 +17,12 @@ struct Player
     int time;
 };
 
+/**
+ * `Node` structure of Skip List
+ * @param pdata The `Player` object storing Player's data
+ * @param next Array of Pointers to next `Node` in each level
+ * @param level The level of that `Node` (Counted from 0)
+ */
 struct Node
 {
     Player pdata;
@@ -33,6 +46,13 @@ struct Node
     }
 };
 
+/**
+ * Skip List Class
+ * 
+ * @param MAX_LEVELS Maximum levels in Skip List 
+ * @param curr_level Current total number of levels in Skip List
+ * @param header Sentinel Header node storing pointer to first Node in each Level
+ */
 class skipList
 {
 private:
@@ -50,6 +70,10 @@ public:
         header = new Node(sent, MAX_LEVELS);
     }
 
+    /**
+     * Generate to which level a new Node would go in Skip list
+     * @returns Level of new Node
+     */
     int level_gen()
     {
         int l = 0;
@@ -62,6 +86,12 @@ public:
         return l;
     }
 
+    /**
+     * Check whether rank of `p1` would be greater that `p2` based on score and timestamp values
+     * @param p1 Player 1 structure
+     * @param p2 Player 2 structure
+     * @returns True if Player 1 would be ranked higher than Player 2
+     */
     bool is_p1_greater_p2(Player p1, Player p2)
     {
         if (p1.pscore != p2.pscore)
@@ -72,6 +102,12 @@ public:
         return p1.time < p2.time;
     }
 
+    /**
+     * Searches a player using Player's ID
+     * @param id ID of player
+     * @returns Pointer to the node whose ID is `id`
+     * @note Since Player ID is unique, searching is done using the ID attribute
+     */
     Node *searchPlayer(int id)
     {
         Node *curr = header->next[0];
@@ -87,6 +123,10 @@ public:
         return nullptr;
     }
 
+    /**
+     * Inserts a new player into the skip list
+     * @param p `Player` structure of new player `p` to be inserted into the skip list
+     */
     void insertPlayer(Player p)
     {
         Node *update[MAX_LEVELS + 1];
@@ -124,6 +164,10 @@ public:
         }
     }
 
+    /**
+     * Delete the player with given Player ID
+     * @param id ID of player to be deleted
+     */
     void deletePlayer(int id)
     {
         Node *update[MAX_LEVELS + 1];
@@ -165,6 +209,12 @@ public:
         }
     }
 
+    /**
+     * Function to update score of player with ID `id` with score `score`
+     * @param id ID of player whose score is to be updated
+     * @param score New Score of Player
+     * @note This algorithm follows by searching the player with given id, constructing a copy Node with old player structure and new score, Deleting the old Node and inserting the new Node
+     */
     void updateScore(int id, int score)
     {
         Node *p = searchPlayer(id);
@@ -175,11 +225,14 @@ public:
         deletePlayer(id);
 
         temp.pscore = score;
-        temp.time = time(NULL);
 
         insertPlayer(temp);
     }
 
+    /**
+     * Function to get rank of the Player with ID `id`
+     * @returns Rank of Player, if it exists, otherwise -1
+     */
     int getRank(int id)
     {
         Node *curr = header->next[0];
@@ -194,6 +247,9 @@ public:
         return rank ? curr != nullptr : -1;
     }
 
+    /**
+     * Display the Top `k` Players in the Leaderboard
+     */
     void getTopK(int k)
     {
         Node *curr = header->next[0];
@@ -207,6 +263,9 @@ public:
         }
     }
 
+    /**
+     * Display the current Leaderboard with rank
+     */
     void displayLeaderboard()
     {
         Node *curr = header->next[0];
@@ -220,6 +279,9 @@ public:
         }
     }
 
+    /**
+     * Display the entire Skip List structure with Level and Score of Player, sorted by rank in descending order
+     */
     void displaySkipListStructure()
     {
         for (int i = curr_level; i >= 0; i--)
