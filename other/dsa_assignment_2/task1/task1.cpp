@@ -157,10 +157,82 @@ public:
         }
 
         delete tar;
+        tar = nullptr;
 
         while (curr_level > 0 && header->next[curr_level] == nullptr)
         {
             curr_level--;
+        }
+    }
+
+    void updateScore(int id, int score)
+    {
+        Node *p = searchPlayer(id);
+        if (p == nullptr)
+            return;
+
+        Player temp = p->pdata;
+        deletePlayer(id);
+
+        temp.pscore = score;
+        temp.time = time(NULL);
+
+        insertPlayer(temp);
+    }
+
+    int getRank(int id)
+    {
+        Node *curr = header->next[0];
+        int rank = 1;
+
+        while (curr != nullptr && curr->pdata.pid != id)
+        {
+            rank++;
+            curr = curr->next[0];
+        }
+
+        return rank ? curr != nullptr : -1;
+    }
+
+    void getTopK(int k)
+    {
+        Node *curr = header->next[0];
+        int count = 0;
+
+        while (curr != nullptr && count < k)
+        {
+            cout << curr->pdata.pid << " " << pdata.pname << " " << curr->pdata.pscore << endl;
+            curr = curr->next[0];
+            count++;
+        }
+    }
+
+    void displayLeaderboard()
+    {
+        Node *curr = header->next[0];
+        int rank = 1;
+
+        while (curr != nullptr)
+        {
+            cout << rank << curr->pdata.pid << " " << pdata.pname << " " << curr->pdata.pscore << endl;
+            curr = curr->next[0];
+            rank++;
+        }
+    }
+
+    void displaySkipListStructure()
+    {
+        for (int i = curr_level; i >= 0; i--)
+        {
+            Node *n = header->next[i];
+            cout << "Level " << i << ":";
+
+            while (n != nullptr)
+            {
+                cout << n->pdata.pscore << " ";
+                n = n->next[i];
+            }
+            cout << endl;
         }
     }
 }
