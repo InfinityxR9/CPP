@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -12,7 +14,7 @@ using namespace std;
 struct Player
 {
     int pid;
-    int pname;
+    string pname;
     int pscore;
     int time;
 };
@@ -33,7 +35,7 @@ struct Node
     {
         next = new Node *[level + 1];
 
-        for (int i = 0; i < level; i++)
+        for (int i = 0; i <= level; i++)
         {
             next[i] = nullptr;
         }
@@ -48,12 +50,12 @@ struct Node
 
 /**
  * Skip List Class
- * 
- * @param MAX_LEVELS Maximum levels in Skip List 
+ *
+ * @param MAX_LEVELS Maximum levels in Skip List
  * @param curr_level Current total number of levels in Skip List
  * @param header Sentinel Header node storing pointer to first Node in each Level
  */
-class skipList
+class SkipList
 {
 private:
     int MAX_LEVELS = 10;
@@ -61,10 +63,9 @@ private:
     Node *header;
 
 public:
-    skipList()
+    SkipList()
     {
-        Player sent;
-        sent.pid = -1;
+        Player sent{-1, "", 0, 0};
 
         curr_level = 0;
         header = new Node(sent, MAX_LEVELS);
@@ -78,7 +79,7 @@ public:
     {
         int l = 0;
 
-        while (float(rand() / RAND_MAX) < 0.5 && l < MAX_LEVELS)
+        while ((float)rand() / RAND_MAX < 0.5 && l < MAX_LEVELS)
         {
             l++;
         }
@@ -92,7 +93,7 @@ public:
      * @param p2 Player 2 structure
      * @returns True if Player 1 would be ranked higher than Player 2
      */
-    bool is_p1_greater_p2(Player p1, Player p2)
+    bool is_p1_greater_p2(const Player &p1, const Player &p2)
     {
         if (p1.pscore != p2.pscore)
         {
@@ -140,6 +141,7 @@ public:
             while (nextptr != nullptr && is_p1_greater_p2(nextptr->pdata, p))
             {
                 curr = nextptr;
+                nextptr = curr->next[i];
             }
             update[i] = curr;
         }
@@ -148,7 +150,7 @@ public:
 
         if (lvl > curr_level)
         {
-            for (int i = curr_level + 1; i < lvl; i++)
+            for (int i = curr_level + 1; i <= lvl; i++)
             {
                 update[i] = header;
             }
@@ -244,7 +246,7 @@ public:
             curr = curr->next[0];
         }
 
-        return rank ? curr != nullptr : -1;
+        return curr != nullptr ? rank : -1;
     }
 
     /**
@@ -257,7 +259,7 @@ public:
 
         while (curr != nullptr && count < k)
         {
-            cout << curr->pdata.pid << " " << pdata.pname << " " << curr->pdata.pscore << endl;
+            cout << curr->pdata.pid << " " << curr->pdata.pname << " " << curr->pdata.pscore << endl;
             curr = curr->next[0];
             count++;
         }
@@ -273,7 +275,7 @@ public:
 
         while (curr != nullptr)
         {
-            cout << rank << curr->pdata.pid << " " << pdata.pname << " " << curr->pdata.pscore << endl;
+            cout << rank << " " << curr->pdata.pid << " " << curr->pdata.pname << " " << curr->pdata.pscore << " " << curr->pdata.time << endl;
             curr = curr->next[0];
             rank++;
         }
@@ -297,11 +299,134 @@ public:
             cout << endl;
         }
     }
-}
+
+    ~SkipList()
+    {
+        Node *curr = header->next[0];
+        while (curr != nullptr)
+        {
+            Node *temp = curr;
+            curr = curr->next[0];
+            delete temp;
+            temp = nullptr;
+        }
+
+        delete header;
+        header = nullptr;
+    }
+};
 
 int main()
 {
-    cout << "Hello world" << endl;
+    srand(time(NULL));
+    SkipList l;
+
+    Player p1{101, "Aryan", 950, 10};
+    Player p2{102, "Aditya", 870, 20};
+    Player p3{103, "Daksh", 920, 30};
+    Player p4{104, "Pranjal", 870, 15};
+    Player p5{105, "Farhan", 990, 25};
+
+    cout << "Inserting Players" << endl;
+    l.insertPlayer(p1);
+    l.insertPlayer(p2);
+    l.insertPlayer(p3);
+    l.insertPlayer(p4);
+    l.insertPlayer(p5);
+
+    cout << "\nLeaderboard after insertion:\n";
+    l.displayLeaderboard();
+
+    cout << "\nSkip List Structure:\n";
+    l.displaySkipListStructure();
+
+    cout << "\nSearching Player with ID 103:\n";
+    Node *found = l.searchPlayer(103);
+
+    if (found != nullptr)
+        cout << "Player Found. Score = " << found->pdata.pscore << " Name= " << found->pdata.pname << endl;
+    else
+        cout << "Player not found\n";
+
+    cout << "\nRank of Player 103: ";
+    cout << l.getRank(103) << endl;
+
+    cout << "\nUpdating score of Player 102 to 980\n";
+    l.updateScore(102, 980);
+
+    cout << "\nLeaderboard after score update:\n";
+    l.displayLeaderboard();
+
+    cout << "\nSkip List Structure:\n";
+    l.displaySkipListStructure();
+
+    cout << "\nDeleting Player 104\n";
+    l.deletePlayer(104);
+
+    cout << "\nLeaderboard after deletion:\n";
+    l.displayLeaderboard();
+
+    cout << "\nTop 3 Players:\n";
+    l.getTopK(3);
+
+    cout << "\nFinal Skip List Structure:\n";
+    l.displaySkipListStructure();
+
+    // Test Case 2
+    cout << "------------------------------------------------" << endl;
+
+    SkipList l2;
+
+    Player q1{201, "Virat", 880, 12};
+    Player q2{202, "Dhoni", 910, 18};
+    Player q3{203, "Ishaan", 910, 10};
+    Player q4{204, "Axar", 840, 25};
+    Player q5{205, "Jadeja", 970, 15};
+
+    cout << "Inserting Players" << endl;
+    l2.insertPlayer(q1);
+    l2.insertPlayer(q2);
+    l2.insertPlayer(q3);
+    l2.insertPlayer(q4);
+    l2.insertPlayer(q5);
+
+    cout << "\nLeaderboard after insertion:\n";
+    l2.displayLeaderboard();
+
+    cout << "\nSkip List Structure:\n";
+    l2.displaySkipListStructure();
+
+    cout << "\nSearching Player with ID 203:\n";
+    Node *found2 = l2.searchPlayer(203);
+
+    if (found2 != nullptr)
+        cout << "Player Found. Score = " << found2->pdata.pscore << " Name= " << found2->pdata.pname << endl;
+    else
+        cout << "Player not found\n";
+
+    cout << "\nRank of Player 203: ";
+    cout << l2.getRank(203) << endl;
+
+    cout << "\nUpdating score of Player 201 to 990\n";
+    l2.updateScore(201, 990);
+
+    cout << "\nLeaderboard after score update:\n";
+    l2.displayLeaderboard();
+
+    cout << "\nSkip List Structure:\n";
+    l2.displaySkipListStructure();
+
+    cout << "\nDeleting Player 204\n";
+    l2.deletePlayer(204);
+
+    cout << "\nLeaderboard after deletion:\n";
+    l2.displayLeaderboard();
+
+    cout << "\nTop 3 Players:\n";
+    l2.getTopK(3);
+
+    cout << "\nFinal Skip List Structure:\n";
+    l2.displaySkipListStructure();
 
     return 0;
 }
