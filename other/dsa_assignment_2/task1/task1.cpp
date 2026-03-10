@@ -128,7 +128,7 @@ public:
      * Inserts a new player into the skip list
      * @param p `Player` structure of new player `p` to be inserted into the skip list
      */
-    void insertPlayer(Player p)
+    void insertPlayer(Player &p)
     {
         Node *update[MAX_LEVELS + 1];
         Node *curr = header;
@@ -167,67 +167,57 @@ public:
     }
 
     /**
-     * Delete the player with given Player ID
-     * @param id ID of player to be deleted
+     * Delete the player with given `Player` Structure
+     * @param p `Player` structure of the player to be deleted
      */
-    void deletePlayer(int id)
+    void deletePlayer(const Player &p)
     {
         Node *update[MAX_LEVELS + 1];
         Node *curr = header;
 
-        Node *tar = header->next[0];
-        while (tar != nullptr && tar->pdata.pid != id)
-        {
-            tar = tar->next[0];
-        }
-
-        if (tar == nullptr)
-            return;
-
         for (int i = curr_level; i >= 0; i--)
         {
-            while (curr->next[i] != nullptr && is_p1_greater_p2(curr->next[i]->pdata, tar->pdata))
+            while (curr->next[i] != nullptr && is_p1_greater_p2(curr->next[i]->pdata, p))
             {
                 curr = curr->next[i];
             }
             update[i] = curr;
         }
 
-        for (int i = 0; i <= curr_level; i++)
+        Node *tar = curr->next[0];
+
+        if (tar != nullptr && tar->pdata.pid == p.pid)
         {
-            if (update[i]->next[i] != tar)
+            for (int i = 0; i <= curr_level; i++)
             {
-                break;
+                if (update[i]->next[i] != tar)
+                {
+                    break;
+                }
+                update[i]->next[i] = tar->next[i];
             }
-            update[i]->next[i] = tar->next[i];
-        }
 
-        delete tar;
-        tar = nullptr;
+            delete tar;
+            tar = nullptr;
 
-        while (curr_level > 0 && header->next[curr_level] == nullptr)
-        {
-            curr_level--;
+            while (curr_level > 0 && header->next[curr_level] == nullptr)
+            {
+                curr_level--;
+            }
         }
     }
 
     /**
-     * Function to update score of player with ID `id` with score `score`
-     * @param id ID of player whose score is to be updated
+     * Function to update score of given player with score `score`
+     * @param p `Player` structure of player whose score is to be updated
      * @param score New Score of Player
-     * @note This algorithm follows by searching the player with given id, constructing a copy Node with old player structure and new score, Deleting the old Node and inserting the new Node
+     * @note This algorithm follows by constructing a copy Node with old player structure and new score, Deleting the old Node and inserting the new Node
      */
-    void updateScore(int id, int score)
+    void updateScore(Player p, int score)
     {
-        Node *p = searchPlayer(id);
-        if (p == nullptr)
-            return;
-
-        Player temp = p->pdata;
-        deletePlayer(id);
-
+        deletePlayer(p);
+        Player temp = p;
         temp.pscore = score;
-
         insertPlayer(temp);
     }
 
@@ -351,8 +341,8 @@ int main()
     cout << "\nRank of Player 103: ";
     cout << l.getRank(103) << endl;
 
-    cout << "\nUpdating score of Player 102 to 980\n";
-    l.updateScore(102, 980);
+    cout << "\nUpdating score of Player p2 (id 102) to 980\n";
+    l.updateScore(p2, 980);
 
     cout << "\nLeaderboard after score update:\n";
     l.displayLeaderboard();
@@ -360,8 +350,8 @@ int main()
     cout << "\nSkip List Structure:\n";
     l.displaySkipListStructure();
 
-    cout << "\nDeleting Player 104\n";
-    l.deletePlayer(104);
+    cout << "\nDeleting Player p4 (id 104)\n";
+    l.deletePlayer(p4);
 
     cout << "\nLeaderboard after deletion:\n";
     l.displayLeaderboard();
@@ -407,8 +397,8 @@ int main()
     cout << "\nRank of Player 203: ";
     cout << l2.getRank(203) << endl;
 
-    cout << "\nUpdating score of Player 201 to 990\n";
-    l2.updateScore(201, 990);
+    cout << "\nUpdating score of Player q1 (id 201) to 990\n";
+    l2.updateScore(q1, 990);
 
     cout << "\nLeaderboard after score update:\n";
     l2.displayLeaderboard();
@@ -416,8 +406,8 @@ int main()
     cout << "\nSkip List Structure:\n";
     l2.displaySkipListStructure();
 
-    cout << "\nDeleting Player 204\n";
-    l2.deletePlayer(204);
+    cout << "\nDeleting Player q4 (id 204)\n";
+    l2.deletePlayer(q4);
 
     cout << "\nLeaderboard after deletion:\n";
     l2.displayLeaderboard();
