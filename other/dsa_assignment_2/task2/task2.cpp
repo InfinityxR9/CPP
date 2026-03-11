@@ -153,7 +153,7 @@ public:
      * @param time Timestamp noted
      * @note This Algorithm works by inserting the new node at tail of the DLL
      */
-    void sendMessage(int id, int sender, string &text, int time)
+    void sendMessage(int id, int sender, string text, int time)
     {
         Msg *n = new Msg(id, sender, text, time);
         if (head == nullptr)
@@ -297,6 +297,7 @@ int main()
     // Test Case 2
     Messager chat2;
 
+    cout << "\n------------------------------------------------\n";
     cout << "Sending Messages\n";
 
     chat2.sendMessage(1, 101, "Hello everyone", 10);
@@ -304,9 +305,7 @@ int main()
     chat2.sendMessage(3, 103, "How are you all?", 30);
     chat2.sendMessage(4, 104, "I'm good", 40);
     chat2.sendMessage(5, 101, "Nice to hear that", 50);
-    chat2.sendMessage(6, 102, "What are you doing?", 60);
-    chat2.sendMessage(7, 103, "Working on assignment", 70);
-    chat2.sendMessage(8, 104, "Same here", 80);
+    chat2.sendMessage(6, 102, "Working on assignment", 60);
 
     cout << "\nInitial Chat\n";
     chat2.displayChat();
@@ -315,32 +314,16 @@ int main()
     chat2.deleteForEveryone(3, 100);
     chat2.displayChat();
 
-    cout << "\nDelete message 6 for me\n";
-    chat2.deleteForMe(6);
-    chat2.displayChat();
-
-    cout << "\nDelete message 7 for everyone\n";
-    chat2.deleteForEveryone(7, 150);
+    cout << "\nDelete message 5 for me\n";
+    chat2.deleteForMe(5);
     chat2.displayChat();
 
     cout << "\nUndo last delete\n";
-    chat2.undoLastDelete();
-    chat2.displayChat();
-
-    cout << "\nUndo again\n";
     chat2.undoLastDelete();
     chat2.displayChat();
 
     cout << "\nAttempt delete after time limit (message 1)\n";
     chat2.deleteForEveryone(1, 400);
-    chat2.displayChat();
-
-    cout << "\nDelete message 8 for me\n";
-    chat2.deleteForMe(8);
-    chat2.displayChat();
-
-    cout << "\nUndo last delete\n";
-    chat2.undoLastDelete();
     chat2.displayChat();
 
     return 0;

@@ -104,21 +104,33 @@ public:
     }
 
     /**
-     * Searches a player using Player's ID
-     * @param id ID of player
-     * @returns Pointer to the node whose ID is `id`
-     * @note Since Player ID is unique, searching is done using the ID attribute
+     * Searches a player using Player's score and timestamp
+     * @param score Score of player
+     * @param time Timestamp of player
+     * @returns Pointer to the node of Player
      */
-    Node *searchPlayer(int id)
+    Node *searchPlayer(int score, int time)
     {
-        Node *curr = header->next[0];
-        while (curr != nullptr)
+        Node *curr = header;
+
+        Player key;
+        key.pscore = score;
+        key.time = time;
+
+        for (int i = curr_level; i >= 0; i--)
         {
-            if (curr->pdata.pid == id)
+            while (curr->next[i] != nullptr &&
+                   is_p1_greater_p2(curr->next[i]->pdata, key))
             {
-                return curr;
+                curr = curr->next[i];
             }
-            curr = curr->next[0];
+        }
+
+        curr = curr->next[0];
+
+        if (curr != nullptr && curr->pdata.pscore == score && curr->pdata.time == time)
+        {
+            return curr;
         }
 
         return nullptr;
@@ -330,11 +342,11 @@ int main()
     cout << "\nSkip List Structure:\n";
     l.displaySkipListStructure();
 
-    cout << "\nSearching Player with ID 103:\n";
-    Node *found = l.searchPlayer(103);
+    cout << "\nSearching Player with score 920 and time 30:\n";
+    Node *found = l.searchPlayer(920, 30);  
 
     if (found != nullptr)
-        cout << "Player Found. Score = " << found->pdata.pscore << " Name= " << found->pdata.pname << endl;
+        cout << "Player Found. ID = " << found->pdata.pid << " Name= " << found->pdata.pname << endl;
     else
         cout << "Player not found\n";
 
@@ -386,11 +398,11 @@ int main()
     cout << "\nSkip List Structure:\n";
     l2.displaySkipListStructure();
 
-    cout << "\nSearching Player with ID 203:\n";
-    Node *found2 = l2.searchPlayer(203);
+    cout << "\nSearching Player with score 910 and time 10:\n";
+    Node *found2 = l2.searchPlayer(910, 10);
 
     if (found2 != nullptr)
-        cout << "Player Found. Score = " << found2->pdata.pscore << " Name= " << found2->pdata.pname << endl;
+        cout << "Player Found. ID = " << found2->pdata.pid << " Name= " << found2->pdata.pname << endl;
     else
         cout << "Player not found\n";
 
