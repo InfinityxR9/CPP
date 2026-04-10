@@ -116,7 +116,11 @@ class FS
     {
         if (!root)
             return create(name, size);
-        if (comparator(root->fname, name))
+        if (root->fname == name) {
+            cout<<"File already exists"<<endl;
+            return root;
+        }
+        else if (comparator(root->fname, name))
             root->right = insertUtil(root->right, name, size);
         else
             root->left = insertUtil(root->left, name, size);
@@ -155,16 +159,28 @@ public:
     {
         int n = name.length();
         if (n == 0 || n >= 20)
+        {
+            cout << "Invalid filename length" << endl;
             return false;
+        }
         if (name[0] == '_' || name[0] == '.' || name[0] == '-' || name[n - 1] == '_' || name[n - 1] == '.' || name[n - 1] == '-')
+        {
+            cout << "Invalid filename, starting or trailing special characters not allowed" << endl;
             return false;
+        }
 
         for (int i = 0; i < n; i++)
         {
             if (!isAllowed(name[i]))
+            {
+                cout << "Invalid character present in filename" << endl;
                 return false;
-            if (i > 0 && ((name[i] == '.' && name[i - 1] == '.') || (name[i] == '-' && name[i - 1] == '-')))
+            }
+            if (i > 0 && ((name[i] == '.' && name[i - 1] == '.') || (name[i] == '-' && name[i - 1] == '-') || (name[i] == '_' && name[i - 1] == '_')))
+            {
+                cout << "Invalid filename, Repeating special characters not allowed" << endl;
                 return false;
+            }
         }
 
         return true;
@@ -184,13 +200,6 @@ public:
     {
         if (!validateFilename(name))
         {
-            cout << "Invalid Filename" << endl;
-            return root;
-        }
-
-        if (search(root, name))
-        {
-            cout << "File with this name already exists" << endl;
             return root;
         }
 
@@ -343,25 +352,27 @@ public:
 
 int main()
 {
-    cout<<"====== FILENAME POLICY ======"<<endl;
-    cout<<"1. Only Alphanumeric characters and some special characters (-, ., _) are allowed"<<endl;
-    cout<<"2. Max length of filename can be 20 characters"<<endl;
-    cout<<"3. Empty filenames not allowed"<<endl;
-    cout<<"4. Special Characters at start or end of filenames not allowed"<<endl;
-    cout<<"5. Repeating . and - not allowed (Repeating _ is allowed)\n"<<endl;
+    cout << "====== FILENAME POLICY ======" << endl;
+    cout << "1. Only Alphanumeric characters and some special characters (-, ., _) are allowed" << endl;
+    cout << "2. Max length of filename can be 20 characters" << endl;
+    cout << "3. Empty filenames not allowed" << endl;
+    cout << "4. Special Characters at start or end of filenames not allowed" << endl;
+    cout << "5. Repeating special characters not allowed\n"
+         << endl;
 
-    cout<<"====== ORDERING/COMPARATOR POLICY ======"<<endl;
-    cout<<"1. Special Characters have highest priority"<<endl;
-    cout<<"2. Digits have less priority than special characters, but greater than alphabets"<<endl;
-    cout<<"3. Alphabets have least priority"<<endl;
-    cout<<"4. If priority is same, then standard ASCII value is used for ordering, i.e, - < . < _ and a-z < A-Z"<<endl;
-    cout<<"5. If still ties persist, longer filenames are given higher priority\n"<<endl;
+    cout << "====== ORDERING/COMPARATOR POLICY ======" << endl;
+    cout << "1. Special Characters have highest priority" << endl;
+    cout << "2. Digits have less priority than special characters, but greater than alphabets" << endl;
+    cout << "3. Alphabets have least priority" << endl;
+    cout << "4. If priority is same, then standard ASCII value is used for ordering, i.e, - < . < _ and a-z < A-Z" << endl;
+    cout << "5. If still ties persist, longer filenames are given higher priority\n"
+         << endl;
 
     FS fs;
     Node *root = nullptr;
 
     cout << "====== INSERTING FILES ======" << endl;
-
+    
     string f1 = "fileA";
     int s1 = 120;
     string f2 = "fileB";
@@ -372,12 +383,17 @@ int main()
     int s4 = 50;
     string f5 = "fileE";
     int s5 = 90;
-
+    
     root = fs.insert(root, f1, s1);
     root = fs.insert(root, f2, s2);
     root = fs.insert(root, f3, s3);
     root = fs.insert(root, f4, s4);
     root = fs.insert(root, f5, s5);
+
+    cout << "\n====== INSERTING EXISTING FILE ======" << endl;
+    string f6 = "fileC";
+    int s6 = 160;
+    root = fs.insert(root, f6, s6);
 
     cout << "\n====== TREE (INORDER + BF) ======" << endl;
     fs.display(root);
@@ -417,8 +433,8 @@ int main()
 
     cout << "\n====== INSERT INVALID FILE ======" << endl;
     string invalid = ".badFile";
-    int s6 = 40;
-    root = fs.insert(root, invalid, s6);
+    int s7 = 40;
+    root = fs.insert(root, invalid, s7);
 
     cout << "\n====== FINAL TREE ======" << endl;
     fs.display(root);
@@ -428,15 +444,16 @@ int main()
     fs.freeNodes(root);
     root = nullptr;
 
-    cout << "All nodes deleted successfully.\n" << endl;
+    cout << "All nodes deleted successfully.\n"
+         << endl;
 
-    cout<<"====== TIME AND SPACE COMPLEXITY ======"<<endl;
-    cout<<"validateFilename(name): O(N), O(1) (N -> length of filename string)"<<endl;
-    cout<<"insert(name, size): O(lg n), O(lg n) (n -> number of files in tree)"<<endl;
-    cout<<"delete(name): O(lg n), O(lg n)"<<endl;
-    cout<<"search(name): O(lg n), O(lg n)"<<endl;
-    cout<<"findMin() / findMax(): O(lg n), O(1)"<<endl;
-    cout<<"display(): O(n), O(lg n)"<<endl;
+    cout << "====== TIME AND SPACE COMPLEXITY ======" << endl;
+    cout << "validateFilename(name): O(N), O(1) (N -> length of filename string)" << endl;
+    cout << "insert(name, size): O(lg n), O(lg n) (n -> number of files in tree)" << endl;
+    cout << "delete(name): O(lg n), O(lg n)" << endl;
+    cout << "search(name): O(lg n), O(lg n)" << endl;
+    cout << "findMin() / findMax(): O(lg n), O(1)" << endl;
+    cout << "display(): O(n), O(lg n)" << endl;
 
     return 0;
 }
