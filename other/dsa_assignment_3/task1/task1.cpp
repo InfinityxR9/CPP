@@ -4,7 +4,14 @@
 
 using namespace std;
 
-// Creates a leaf node
+/**
+ * File Node Structure
+ * @param fname Name of file
+ * @param fsize Size of file
+ * @param left Pointer to left child
+ * @param right Pointer to right child
+ * @param height Height of the file node
+ */
 struct Node
 {
     string fname;
@@ -17,8 +24,16 @@ struct Node
     Node(string n, int s) : fname(n), fsize(s), height(1), left(nullptr), right(nullptr) {}
 };
 
+/**
+ * File System Class, implemented as an AVL Tree
+ */
 class FS
 {
+    /**
+     * Utility function is check if a character is allowed as per Filename Policy
+     * @param c Character to check
+     * @returns `true` if chracter is allowed, otherwise `false`
+     */
     bool isAllowed(char &c)
     {
         if (isalnum(c))
@@ -30,6 +45,11 @@ class FS
 
     // alphbets (a-z, A-Z) < digits (0-9) < special characters (_, -, .)
     // by ascii ordering, - < . < _ AND a-z < A-Z
+    /**
+     * Utility function to get the priority of an allowed character
+     * @param c Character whose priority is needed
+     * @returns the `int` priority of character `c`
+     */
     int priority(char &c)
     {
         if (isalpha(c))
@@ -40,6 +60,12 @@ class FS
     }
 
     // To check if the f2 file would be considered "higher" for ranking (f1<f2)
+    /**
+     * Function to check if file `f2` would be considered higher in ordering and in priority than file `f1`
+     * @param f1 Filename `f1`
+     * @param f2 Filename `f2`
+     * @returns `true` if `f2` has higher priority in ordering, `false` otherwise
+     */
     bool comparator(string &f1, string &f2)
     {
         int n = min(f1.length(), f2.length());
@@ -59,16 +85,32 @@ class FS
         return f1.length() < f2.length();
     }
 
+    /**
+     * Function to create a leaf node in tree
+     * @param name Filename
+     * @param size File size
+     * @returns a new leaf node with given properties
+     */
     Node *create(string name, int size)
     {
         return new Node(name, size);
     }
 
+    /**
+     * Utility function to get the Balance Factor of a Node
+     * @param root Node pointer
+     * @returns Balance factor of node `root`
+     */
     int getBF(Node *root)
     {
         return (root->left ? root->left->height : 0) - (root->right ? root->right->height : 0);
     }
 
+    /**
+     * Function to perform single left rotation
+     * @param root Node about which Left rotation is performed
+     * @returns modifed `root` after rotation
+     */
     Node *leftRotate(Node *root)
     {
         if (!root || !root->right)
@@ -85,6 +127,11 @@ class FS
         return new_r;
     }
 
+    /**
+     * Function to perform single right rotation
+     * @param root Node about which Right rotation is performed
+     * @returns modifed `root` after rotation
+     */
     Node *rightRotate(Node *root)
     {
         if (!root || !root->left)
@@ -101,6 +148,11 @@ class FS
         return new_r;
     }
 
+    /**
+     * Utility function to get inorder predecessor of a node (Given it exists in Left Subtree)
+     * @param root Node whose inorder predecessor is to be found
+     * @returns the inorder predecessor of `root`
+     */
     Node *inorderPred(Node *root)
     {
         root = root->left;
@@ -111,7 +163,13 @@ class FS
         return root;
     }
 
-    // Inserts a file with valid and unique file name
+    /**
+     * Function to insert a file with valid and unique filename
+     * @param root root node
+     * @param name Filename
+     * @param size File size
+     * @returns modified root after insertion
+     */
     Node *insertUtil(Node *root, string &name, int &size)
     {
         if (!root)
@@ -155,6 +213,11 @@ class FS
     }
 
 public:
+    /**
+     * Function to validate whether given name is a valid or not as per Filename Policy
+     * @param name Filename to be checked
+     * @returns `true` if a valid filename, otherwise `false`
+     */
     bool validateFilename(string &name)
     {
         int n = name.length();
@@ -186,6 +249,12 @@ public:
         return true;
     }
 
+    /**
+     * Function to search a node in the FS Tree
+     * @param root root node
+     * @param name Filename to be searched
+     * @returns Pointer to searched node, if found, otherwise `nullptr`
+     */
     Node *search(Node *root, string &name)
     {
         if (!root || root->fname == name)
@@ -196,6 +265,13 @@ public:
             return search(root->left, name);
     }
 
+    /**
+     * Function to insert into the FS AVL Tree
+     * @param root root node
+     * @param name Filename
+     * @param size File size
+     * @returns modifed root after insertion
+     */
     Node *insert(Node *root, string &name, int &size)
     {
         if (!validateFilename(name))
@@ -207,6 +283,12 @@ public:
         return insertUtil(root, name, size);
     }
 
+    /**
+     * Function to delete a node from the FS AVL tree
+     * @param root root node
+     * @param name Filename to be deleted
+     * @returns modified root after deletion
+     */
     Node *delete_(Node *root, string &name)
     {
         if (!root)
@@ -284,6 +366,11 @@ public:
         return root;
     }
 
+    /**
+     * Function to find the minimum element in the FS AVL tree
+     * @param root root node
+     * @returns pointer to the minimum element node
+     */
     Node *findMin(Node *root)
     {
         if (!root || !root->left)
@@ -293,6 +380,11 @@ public:
         return root;
     }
 
+    /**
+     * Function to find the maximum element in the FS AVL tree
+     * @param root root node
+     * @returns pointer to the maximum element node
+     */
     Node *findMax(Node *root)
     {
         if (!root || !root->right)
@@ -302,6 +394,10 @@ public:
         return root;
     }
 
+    /**
+     * Function to display the FS AVL tree in inorder Traversal, along with Node information and Balance Factor
+     * @param root root node
+     */
     void display(Node *root)
     {
         if (!root)
@@ -314,30 +410,10 @@ public:
         display(root->right);
     }
 
-    void levelorder(Node *root)
-    {
-        if (!root)
-            return;
-        queue<Node *> q;
-        q.push(root);
-
-        while (!q.empty())
-        {
-            int l = q.size();
-            for (int i = 0; i < l; i++)
-            {
-                Node *n = q.front();
-                q.pop();
-                cout << n->fname << " " << n->fsize << " " << n->height << "| ";
-                if (n->left)
-                    q.push(n->left);
-                if (n->right)
-                    q.push(n->right);
-            }
-            cout << endl;
-        }
-    }
-
+    /**
+     * Function to free all the nodes
+     * @param root root node
+     */
     void freeNodes(Node *root)
     {
         if (root)
