@@ -425,11 +425,6 @@ public:
                 cout << "Not a valid Operator/Operand/Bracket" << endl;
                 return false;
             }
-            if (i > 0 && isOperator(c) && isOperator(exp[i - 1]))
-            {
-                cout << "Consecutive operators Not allowed" << endl;
-                return false;
-            }
             if (isOperand(c))
                 op++;
             else if (isOperator(c))
@@ -648,9 +643,9 @@ int main()
     if (!tree.validateExpression(expr))
     {
         cout << "Expression is INVALID\n";
-        return 0;
     }
-    cout << "Expression is VALID\n";
+    else
+        cout << "Expression is VALID\n";
 
     cout << "\nFORMAT DETECTION\n";
     string format = tree.detectFormat(expr);
@@ -698,6 +693,14 @@ int main()
     string expr2 = "(a+b)*(c-d)";
     cout << "\nTesting Expression: " << expr2 << endl;
 
+    cout << "\nEXPRESSION VALIDATION\n";
+    if (!tree.validateExpression(expr2))
+    {
+        cout << "Expression is INVALID\n";
+    }
+    else
+        cout << "Expression is VALID\n";
+
     cout << "\nFORMAT DETECTION\n";
     string format2 = tree2.detectFormat(expr2);
     cout << "Detected Format: " << format2 << endl;
@@ -740,6 +743,14 @@ int main()
     string expr3 = "*+ab-cd";
     cout << "\nTesting Expression: " << expr3 << endl;
 
+    cout << "\nEXPRESSION VALIDATION\n";
+    if (!tree.validateExpression(expr3))
+    {
+        cout << "Expression is INVALID\n";
+    }
+    else
+        cout << "Expression is VALID\n";
+
     string format3 = tree2.detectFormat(expr3);
     cout << "Detected Format: " << format3 << endl;
 
@@ -769,6 +780,14 @@ int main()
     string expr4 = "a++b";
     cout << "\nTesting Expression: " << expr4 << endl;
 
+    cout << "\nEXPRESSION VALIDATION\n";
+    if (!tree.validateExpression(expr4))
+    {
+        cout << "Expression is INVALID\n";
+    }
+    else
+        cout << "Expression is VALID\n";
+
     string format4 = tree2.detectFormat(expr4);
     cout << "Detected Format: " << format4 << endl;
 
@@ -778,24 +797,54 @@ int main()
         cout << "Invalid expression correctly rejected\n";
     }
 
-    string expr5 = "ab/";
-    cout << "\nTesting Expression: " << expr5 << endl;
+    string expr7 = "((a+b)*(c+d)-(e/f+g*h))";
+    cout << "\nTesting Expression: " << expr7 << endl;
 
-    Node *root5 = tree2.buildTree(expr5);
-
-    if (root5)
+    cout << "\nEXPRESSION VALIDATION\n";
+    if (!tree.validateExpression(expr7))
     {
-        map<char, double> varMap5;
-        varMap5['a'] = 10;
-        varMap5['b'] = 0;
+        cout << "Expression is INVALID\n";
+    }
+    else
+        cout << "Expression is VALID\n";
 
-        bool flag5 = true;
-        double result5 = tree2.evaluate(root5, varMap5, flag5);
+    string format7 = tree2.detectFormat(expr7);
+    cout << "Detected Format: " << format7 << endl;
 
-        if (!flag5)
-            cout << "Evaluation error handled correctly\n";
+    Node *root7 = tree2.buildTree(expr7);
 
-        tree2.freeTree(root5);
+    if (root7)
+    {
+        cout << "\nREPRESENTATIONS\n";
+        cout << "Infix   : " << tree2.toInfix(root7) << endl;
+        cout << "Prefix  : " << tree2.toPrefix(root7) << endl;
+        cout << "Postfix : " << tree2.toPostfix(root7) << endl;
+
+        cout << "\nEVALUATION\n";
+        map<char, double> varMap7;
+        varMap7['a'] = 2;
+        varMap7['b'] = 3;
+        varMap7['c'] = 4;
+        varMap7['d'] = 5;
+        varMap7['e'] = 20;
+        varMap7['f'] = 2;
+        varMap7['g'] = 3;
+        varMap7['h'] = 4;
+
+        bool flag7 = true;
+        double result7 = tree2.evaluate(root7, varMap7, flag7);
+
+        if (flag7)
+            cout << "Evaluated Result: " << result7 << endl;
+
+        cout << "\nNODE COUNTS\n";
+        int *counts7 = tree2.countNodes(root7);
+        cout << "Total Nodes   : " << counts7[0] << endl;
+        cout << "Internal Nodes: " << counts7[1] << endl;
+        cout << "Leaf Nodes    : " << counts7[2] << endl;
+        delete[] counts7;
+
+        tree2.freeTree(root7);
     }
 
     return 0;
