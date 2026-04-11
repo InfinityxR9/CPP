@@ -425,22 +425,6 @@ public:
 
 int main()
 {
-    cout << "FILENAME POLICY" << endl;
-    cout << "1. Only Alphanumeric characters and some special characters (-, ., _) are allowed" << endl;
-    cout << "2. Max length of filename can be 20 characters" << endl;
-    cout << "3. Empty filenames not allowed" << endl;
-    cout << "4. Special Characters at start or end of filenames not allowed" << endl;
-    cout << "5. Repeating special characters not allowed\n"
-         << endl;
-
-    cout << "ORDERING/COMPARATOR POLICY" << endl;
-    cout << "1. Special Characters have highest priority" << endl;
-    cout << "2. Digits have less priority than special characters, but greater than alphabets" << endl;
-    cout << "3. Alphabets have least priority" << endl;
-    cout << "4. If priority is same, then standard ASCII value is used for ordering, i.e, - < . < _ and a-z < A-Z" << endl;
-    cout << "5. If still ties persist, longer filenames are given higher priority\n"
-         << endl;
-
     FS fs;
     Node *root = nullptr;
 
@@ -584,14 +568,6 @@ int main()
 
     fs2.freeNodes(root2);
     root2 = nullptr;
-
-    cout << "\nTIME AND SPACE COMPLEXITY" << endl;
-    cout << "validateFilename(name): O(N), O(1) (N -> length of filename string)" << endl;
-    cout << "insert(name, size): O(lg n), O(lg n) (n -> number of files in tree)" << endl;
-    cout << "delete(name): O(lg n), O(lg n)" << endl;
-    cout << "search(name): O(lg n), O(lg n)" << endl;
-    cout << "findMin() / findMax(): O(lg n), O(1)" << endl;
-    cout << "display(): O(n), O(lg n)" << endl;
 
     return 0;
 }
