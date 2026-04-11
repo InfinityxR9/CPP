@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <queue>
 
 using namespace std;
 
@@ -43,8 +42,6 @@ class FS
         return false;
     }
 
-    // alphbets (a-z, A-Z) < digits (0-9) < special characters (_, -, .)
-    // by ascii ordering, - < . < _ AND a-z < A-Z
     /**
      * Utility function to get the priority of an allowed character
      * @param c Character whose priority is needed
@@ -59,7 +56,6 @@ class FS
         return 3;
     }
 
-    // To check if the f2 file would be considered "higher" for ranking (f1<f2)
     /**
      * Function to check if file `f2` would be considered higher in ordering and in priority than file `f1`
      * @param f1 Filename `f1`
@@ -473,7 +469,6 @@ int main()
 
     cout << "\n====== TREE (INORDER + BF) ======" << endl;
     fs.display(root);
-    fs.levelorder(root);
 
     cout << "\n====== SEARCH TEST ======" << endl;
     string key = "fileC";
@@ -505,7 +500,6 @@ int main()
 
     cout << "\nAfter deleting fileA:\n";
     fs.display(root);
-    fs.levelorder(root);
 
     cout << "\n====== INSERT INVALID FILE ======" << endl;
     string invalid = ".badFile";
@@ -514,7 +508,6 @@ int main()
 
     cout << "\n====== FINAL TREE ======" << endl;
     fs.display(root);
-    fs.levelorder(root);
 
     cout << "\n====== FREEING MEMORY ======" << endl;
     fs.freeNodes(root);
