@@ -691,5 +691,112 @@ int main()
 
     tree.freeTree(root);
 
+    cout << "\n\nTEST CASE 2\n";
+
+    ExpTree tree2;
+
+    string expr2 = "(a+b)*(c-d)";
+    cout << "\nTesting Expression: " << expr2 << endl;
+
+    cout << "\nFORMAT DETECTION\n";
+    string format2 = tree2.detectFormat(expr2);
+    cout << "Detected Format: " << format2 << endl;
+
+    Node *root2 = tree2.buildTree(expr2);
+    if (!root2)
+    {
+        cout << "Tree construction failed\n";
+    }
+    else
+    {
+        cout << "\nREPRESENTATIONS\n";
+        cout << "Infix   : " << tree2.toInfix(root2) << endl;
+        cout << "Prefix  : " << tree2.toPrefix(root2) << endl;
+        cout << "Postfix : " << tree2.toPostfix(root2) << endl;
+
+        cout << "\nEVALUATION\n";
+        map<char, double> varMap2;
+        varMap2['a'] = 5;
+        varMap2['b'] = 2;
+        varMap2['c'] = 10;
+        varMap2['d'] = 3;
+
+        bool flag2 = true;
+        double result2 = tree2.evaluate(root2, varMap2, flag2);
+
+        if (flag2)
+            cout << "Evaluated Result: " << result2 << endl;
+
+        cout << "\nNODE COUNTS\n";
+        int *counts2 = tree2.countNodes(root2);
+        cout << "Total Nodes   : " << counts2[0] << endl;
+        cout << "Internal Nodes: " << counts2[1] << endl;
+        cout << "Leaf Nodes    : " << counts2[2] << endl;
+        delete[] counts2;
+
+        tree2.freeTree(root2);
+    }
+
+    string expr3 = "*+ab-cd";
+    cout << "\nTesting Expression: " << expr3 << endl;
+
+    string format3 = tree2.detectFormat(expr3);
+    cout << "Detected Format: " << format3 << endl;
+
+    Node *root3 = tree2.buildTree(expr3);
+
+    if (root3)
+    {
+        cout << "\nPrefix  : " << tree2.toPrefix(root3) << endl;
+        cout << "Infix   : " << tree2.toInfix(root3) << endl;
+        cout << "Postfix : " << tree2.toPostfix(root3) << endl;
+
+        map<char, double> varMap3;
+        varMap3['a'] = 1;
+        varMap3['b'] = 2;
+        varMap3['c'] = 3;
+        varMap3['d'] = 4;
+
+        bool flag3 = true;
+        double result3 = tree2.evaluate(root3, varMap3, flag3);
+
+        if (flag3)
+            cout << "Evaluated Result: " << result3 << endl;
+
+        tree2.freeTree(root3);
+    }
+
+    string expr4 = "a++b";
+    cout << "\nTesting Expression: " << expr4 << endl;
+
+    string format4 = tree2.detectFormat(expr4);
+    cout << "Detected Format: " << format4 << endl;
+
+    Node *root4 = tree2.buildTree(expr4);
+    if (!root4)
+    {
+        cout << "Invalid expression correctly rejected\n";
+    }
+
+    string expr5 = "ab/";
+    cout << "\nTesting Expression: " << expr5 << endl;
+
+    Node *root5 = tree2.buildTree(expr5);
+
+    if (root5)
+    {
+        map<char, double> varMap5;
+        varMap5['a'] = 10;
+        varMap5['b'] = 0;
+
+        bool flag5 = true;
+        double result5 = tree2.evaluate(root5, varMap5, flag5);
+
+        if (!flag5)
+            cout << "Evaluation error handled correctly\n";
+
+        tree2.freeTree(root5);
+    }
+
     return 0;
 }
