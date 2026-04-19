@@ -458,6 +458,7 @@ public:
      */
     Node *buildTree(string &exp)
     {
+        if (!validateExpression(exp)) return nullptr;
         string format = detectFormat(exp);
 
         if (format == "INFIX")
