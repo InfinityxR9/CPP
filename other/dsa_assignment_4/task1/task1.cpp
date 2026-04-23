@@ -63,8 +63,7 @@ bool validateGraph(Edge edges[], int m, int n)
 {
     for (int i = 0; i < m; i++)
     {
-        if (edges[i].u < 0 || edges[i].u >= n ||
-            edges[i].v < 0 || edges[i].v >= n)
+        if (edges[i].u < 0 || edges[i].u >= n || edges[i].v < 0 || edges[i].v >= n)
         {
             cout << "Invalid node ID detected\n";
             return false;
