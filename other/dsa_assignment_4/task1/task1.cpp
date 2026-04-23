@@ -37,7 +37,7 @@ int parentDSU[MAX_N];
 
 int distArr[MAX_N];
 int parentPath[MAX_N];
-bool explored[MAX_N];
+bool vis[MAX_N];
 
 int heapSize = 0;
 
@@ -263,7 +263,7 @@ void shortestPath(int src, int dest, int n)
     for (int i = 0; i < n; i++)
     {
         distArr[i] = INF;
-        explored[i] = false;
+        vis[i] = false;
         parentPath[i] = -1;
     }
 
@@ -276,10 +276,10 @@ void shortestPath(int src, int dest, int n)
         HeapNode cur = extractMin();
         int u = cur.node;
 
-        if (explored[u])
+        if (vis[u])
             continue;
 
-        explored[u] = true;
+        vis[u] = true;
         for (int i = head[u]; i != -1; i = adj[i].next)
         {
             int v = adj[i].to;
