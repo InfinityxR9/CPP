@@ -34,6 +34,7 @@ HeapNode heap[MAX_N];
 
 int head[MAX_N];
 int parentDSU[MAX_N];
+int rankDSU[MAX_N];
 
 int distArr[MAX_N];
 int parentPath[MAX_N];
@@ -106,8 +107,20 @@ void uniteSet(int a, int b)
     a = findSet(a);
     b = findSet(b);
 
-    if (a != b)
+    if (a == b)
+        return;
+
+    if (rankDSU[a] < rankDSU[b])
+        parentDSU[a] = b;
+
+    else if (rankDSU[a] > rankDSU[b])
         parentDSU[b] = a;
+
+    else
+    {
+        parentDSU[b] = a;
+        rankDSU[a]++;
+    }
 }
 
 void swapEdge(Edge &a, Edge &b)
