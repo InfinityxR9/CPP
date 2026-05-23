@@ -7,6 +7,7 @@ using namespace std;
 
 // Map is an associative array, equivalent to Dictionary/Objects
 // *Map is executed as a Self-Balancing Tree, hence the operations like insert, erase, count take O(lg n)
+// ***This complexity is also dependent on the datatype of the key, eg, if the key is of string like, additional complexity of O(L) will be there as to insert, interally nearly lg N comparisons are made, and to compare strings, O(L) time is taken 
 
 // *Unordered Map (implemented as a hash table (open hashing)) takes only O(1) time for insert, erase, count operations (In super worst case, like mathematical collisioning, it might take O(n))
 
@@ -24,7 +25,7 @@ int main()
     marksMap.insert({{"PJ", 80}, {"HP", 97}});
 
     map<string, int>::iterator iter = marksMap.begin();
-    for (iter; iter != marksMap.end(); iter++)
+    for (iter; iter != marksMap.end(); iter++) // -> N lg N complexity as lg N time is taken to access the value/search
     {
         cout << iter->first << " " << iter->second << endl; // first to get key, second to get value
     }

@@ -1,0 +1,19 @@
+(a + b) % M = ((a % M) + (b % M)) % M
+(a * b) % M = ((a % M) * (b % M)) % M
+(a - b) % M = ((a % M) - (b % M) + M) % M
+(a / b) % M = ((a % M) * (b^-1 % M)) % M
+
+Example:
+Given a number N, find its factorial 
+constrainst: 0 <= N <= 100
+
+Now, clearly even long long will overflow after 20!. To solve this problem, examiner usually asks the modulo, eg: don't gimme the actual answer, but report ANS % 47 (Say 47), this will ensure that the final answer is constrained within 47.
+
+But still how will you calculate the factorial if it is overflowing even before calculatingg the modulo.
+ANS: Calculate Modulo in every step and use properties of modular arithmetic (Step-Wise modulo)
+Eg: 5! % M = 5*4*3*2*1 % M = ((5*4*3)%M * (2 % M)) % M = ((((5*4) %M) * (3 % M)) % M * (2 % M)) % M = (((((5 % M) * (4 % M)) % M) * (3 % M)) % M * (2 % M)) % M
+that is, just take modulo in each step of loop iteration (works like the same manner in addition too)
+
+MOST OF THE TIME, M = 10^9 + 7, why?
+- very close to INT_MAX, taking modulo with it makes sure the overall number doesn't overflow in int datatype
+- Multiplicative Inverse (It is pretty feasible to calculate the Multiplicative Inverse of all the numbers upto M, if M is prime), which in case 10^9 + 7 is.

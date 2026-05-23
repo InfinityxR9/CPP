@@ -1,0 +1,17 @@
+Nearly in 1 sec -> 10^8 operations (to avoid TLE)
+int range: -10^9 to 10^9
+long int range: -10^12 to 10^12
+long long int range: -10^18 to 10^18
+fixed keyword -> to show the number without scientific notation (in double)
+setprecision(0) -> set precision (number of decimals in output)
+Global arrays are by default set to 0 for each index
+
+cin.ignore() to move the cursor at next line and so that getline() works as expected after cin
+
+if the number is too large to handle even in long long, input the number as string
+local array size limits (inside functions/classes) -> 10^5
+global array size limits -> 10^7 (but needs to be declared with const keyword)
+
+iterator++ -> increments iterator to next iterator
+iterator + 1 -> increments iterator to next memory location
+In case of vectors, both operations are equivalent, but only it++ will be working for non-linear DS.

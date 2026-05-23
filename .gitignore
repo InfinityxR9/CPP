@@ -7,3 +7,5 @@ bin/
 .idea/
 *.sublime-project
 *.swp
+*.in
+*.out
