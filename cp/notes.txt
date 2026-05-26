@@ -15,3 +15,10 @@ global array size limits -> 10^7 (but needs to be declared with const keyword)
 iterator++ -> increments iterator to next iterator
 iterator + 1 -> increments iterator to next memory location
 In case of vectors, both operations are equivalent, but only it++ will be working for non-linear DS.
+
+CONSTANT FACTOR OPTIMISATIONS:
+- use constexpr for hardcoded precomputation to reduce time in execution
+- use \n instead of std::endl at times to prevent unnecesarry buffer flushing each time
+- If possible use the fixed size memory allocation to avoid allocation overhead.
+- preincrement (++i) is favoured over postincrement
+- use inline functions whenever possible (simple getters/setters, no recursion, loop, complex logic) as compiler tend to completely replace the function name with inline function body (like #define (s))
